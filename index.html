@@ -52,11 +52,53 @@
           </div>
 
           <section class="editor-panel output-panel">
-            <div class="panel-heading"><span>FORMATTED OUTPUT</span><div><button class="text-button" id="copyButton">Copy</button><button class="text-button" id="downloadButton">Download</button></div></div>
+            <div class="panel-heading"><span>FORMATTED OUTPUT</span><div><button class="text-button" id="copyButton">Copy</button><button class="text-button" id="downloadButton">Download result</button></div></div>
             <pre id="outputEditor" class="code-output" aria-live="polite"><code>Your formatted result will appear here.</code></pre>
             <div class="panel-footer"><span id="outputCount">0 characters</span><span id="outputState">Waiting for input</span></div>
           </section>
         </div>
+        <section class="report-builder" aria-labelledby="reportTitle">
+          <div class="report-intro">
+            <p class="eyebrow">EXPORT</p>
+            <h2 id="reportTitle">Create a request report</h2>
+            <p>Choose whether the beautified content belongs to the request or response before downloading.</p>
+          </div>
+          <div class="report-controls">
+            <fieldset class="destination-selector">
+              <legend>Save beautified output as</legend>
+              <label><input type="radio" name="reportTarget" value="request" /> Request</label>
+              <label><input type="radio" name="reportTarget" value="response" checked /> Response</label>
+            </fieldset>
+            <div class="report-fields">
+              <label class="report-field">
+                <span>Credentials <small>optional</small></span>
+                <textarea id="credentialsInput" spellcheck="false" placeholder="Add safe-to-share authentication details…"></textarea>
+              </label>
+              <label class="report-field">
+                <span>Request</span>
+                <textarea id="reportRequestInput" spellcheck="false" placeholder="Your original JSON or XML request appears here after formatting."></textarea>
+              </label>
+              <label class="report-field">
+                <span>Response</span>
+                <textarea id="reportResponseInput" spellcheck="false" placeholder="Your formatted response appears here after formatting."></textarea>
+              </label>
+            </div>
+            <div class="report-options">
+              <fieldset class="section-selector">
+                <legend>Include in file</legend>
+                <label><input type="checkbox" id="includeCredentials" checked /> Credentials</label>
+                <label><input type="checkbox" id="includeRequest" checked /> Request</label>
+                <label><input type="checkbox" id="includeResponse" checked /> Response</label>
+              </fieldset>
+              <button class="quiet-button" id="loadReportDataButton">Load formatted output</button>
+              <div class="report-download">
+                <label for="reportFilename">File name</label>
+                <input id="reportFilename" value="api-transaction-report" />
+                <button class="download-report-button" id="downloadReportButton">Download report <span aria-hidden="true">↓</span></button>
+              </div>
+            </div>
+          </div>
+        </section>
       </section>
 
       <section class="notes">

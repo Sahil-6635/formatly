@@ -54,7 +54,11 @@ function renderOutput(value) {
   const highlighter = format === 'json' ? highlightJson : highlightXml;
   output.innerHTML = value.split('\n').map(line => `<span class="code-line">${highlighter(line) || ' '}</span>`).join('');
 }
-function setOutput(value, state = 'Formatted successfully') { lastOutput = value; renderOutput(value); document.querySelector('#outputCount').textContent = `${value.length.toLocaleString()} characters`; document.querySelector('#outputState').textContent = state; }
+function syncReportData() {
+  const target = document.querySelector('input[name="reportTarget"]:checked').value;
+  document.querySelector(target === 'request' ? '#reportRequestInput' : '#reportResponseInput').value = lastOutput;
+}
+function setOutput(value, state = 'Formatted successfully') { lastOutput = value; renderOutput(value); if (state === 'Formatted successfully') syncReportData(); document.querySelector('#outputCount').textContent = `${value.length.toLocaleString()} characters`; document.querySelector('#outputState').textContent = state; }
 function setFormat(next) {
   format = next;
   formatTabs.forEach(tab => { const selected = tab.dataset.format === format; tab.classList.toggle('active', selected); tab.setAttribute('aria-selected', selected); });
@@ -86,6 +90,21 @@ document.querySelector('#uploadButton').addEventListener('click', () => fileInpu
 fileInput.addEventListener('change', async () => { const file = fileInput.files[0]; if (!file) return; input.value = await file.text(); if (file.name.endsWith('.xml')) setFormat('xml'); if (file.name.endsWith('.json')) setFormat('json'); updateCounts(); setToast(`${file.name} loaded`); fileInput.value = ''; });
 document.querySelector('#copyButton').addEventListener('click', async () => { if (!lastOutput) return setToast('Nothing to copy yet.'); await navigator.clipboard.writeText(lastOutput); setToast('Formatted output copied.'); });
 document.querySelector('#downloadButton').addEventListener('click', () => { if (!lastOutput) return setToast('Nothing to download yet.'); const blob = new Blob([lastOutput], { type: format === 'json' ? 'application/json' : 'application/xml' }); const link = Object.assign(document.createElement('a'), { href:URL.createObjectURL(blob), download:`beautified.${format}` }); link.click(); URL.revokeObjectURL(link.href); });
+document.querySelector('#loadReportDataButton').addEventListener('click', () => { syncReportData(); setToast('Formatted output loaded into the selected field.'); });
+document.querySelector('#downloadReportButton').addEventListener('click', () => {
+  const sections = [];
+  const credentials = document.querySelector('#credentialsInput').value.trim();
+  if (document.querySelector('#includeCredentials').checked && credentials) sections.push(`CREDENTIALS\n${'='.repeat(48)}\n${credentials}`);
+  const request = document.querySelector('#reportRequestInput').value.trim();
+  const response = document.querySelector('#reportResponseInput').value.trim();
+  if (document.querySelector('#includeRequest').checked && request) sections.push(`REQUEST\n${'='.repeat(48)}\n${request}`);
+  if (document.querySelector('#includeResponse').checked && response) sections.push(`RESPONSE\n${'='.repeat(48)}\n${response}`);
+  if (!sections.length) { setToast('Choose content to include before downloading.'); return; }
+  const filename = document.querySelector('#reportFilename').value.trim().replace(/[^a-z0-9_-]/gi, '-') || 'api-transaction-report';
+  const report = `API TRANSACTION REPORT\nGenerated: ${new Date().toLocaleString()}\n\n${sections.join('\n\n')}`;
+  const link = Object.assign(document.createElement('a'), { href: URL.createObjectURL(new Blob([report], { type: 'text/plain;charset=utf-8' })), download: `${filename}.txt` });
+  link.click(); URL.revokeObjectURL(link.href); setToast('Report download started.');
+});
 const themeToggle = document.querySelector('#themeToggle');
 function setTheme(dark) { document.body.classList.toggle('dark', dark); themeToggle.setAttribute('aria-pressed', dark); themeToggle.innerHTML = `<span aria-hidden="true">${dark ? '☀' : '◐'}</span> ${dark ? 'Light mode' : 'Dark mode'}`; localStorage.setItem('formatly-theme', dark ? 'dark' : 'light'); }
 themeToggle.addEventListener('click', () => setTheme(!document.body.classList.contains('dark')));
