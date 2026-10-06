@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#101828" />
+    <title>Formatly — JSON & XML Beautifier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Formatly home"><span class="brand-mark">&lt;/&gt;</span>formatly</a>
+        <div class="topbar-actions">
+          <button class="theme-toggle" id="themeToggle" aria-pressed="false"><span aria-hidden="true">◐</span> Dark mode</button>
+          <div class="api-status" id="apiStatus"><span class="status-dot"></span><span>Java API configured</span></div>
+        </div>
+      </header>
+
+      <section class="hero">
+        <p class="eyebrow">DEVELOPER UTILITY</p>
+        <h1>Make structured data<br /><em>beautifully readable.</em></h1>
+        <p class="hero-copy">Format JSON or organization-specific XML using your Java beautification service.</p>
+      </section>
+
+      <section class="workspace" aria-label="Formatter workspace">
+        <div class="toolbar">
+          <div class="format-tabs" role="tablist" aria-label="Format type">
+            <button class="format-tab active" data-format="json" role="tab" aria-selected="true">{ } JSON</button>
+            <button class="format-tab" data-format="xml" role="tab" aria-selected="false">&lt; /&gt; XML</button>
+          </div>
+          <div class="toolbar-actions">
+            <input type="file" id="fileInput" accept=".json,.xml,.txt,application/json,text/xml,application/xml" hidden />
+            <button class="quiet-button" id="uploadButton">Upload file</button>
+            <button class="quiet-button" id="sampleButton">Use sample</button>
+          </div>
+        </div>
+
+        <div class="editors">
+          <section class="editor-panel input-panel">
+            <div class="panel-heading"><span>INPUT</span><button class="text-button" id="clearButton">Clear</button></div>
+            <textarea id="inputEditor" spellcheck="false" aria-label="Input content" placeholder="Paste your JSON here…"></textarea>
+            <div class="panel-footer"><span id="inputCount">0 characters</span><span id="inputHint">Accepts raw or escaped JSON</span></div>
+          </section>
+
+          <div class="format-action">
+            <button class="format-button" id="formatButton"><span>Beautify</span><span aria-hidden="true">→</span></button>
+            <span class="shortcut">⌘ / Ctrl + Enter</span>
+          </div>
+
+          <section class="editor-panel output-panel">
+            <div class="panel-heading"><span>FORMATTED OUTPUT</span><div><button class="text-button" id="copyButton">Copy</button><button class="text-button" id="downloadButton">Download</button></div></div>
+            <pre id="outputEditor" class="code-output" aria-live="polite"><code>Your formatted result will appear here.</code></pre>
+            <div class="panel-footer"><span id="outputCount">0 characters</span><span id="outputState">Waiting for input</span></div>
+          </section>
+        </div>
+      </section>
+
+      <section class="notes">
+        <article><span class="note-icon">✦</span><div><h2>JSON made clean</h2><p>Handles standard JSON and escaped payloads returned by APIs.</p></div></article>
+        <article><span class="note-icon">✦</span><div><h2>XML rules preserved</h2><p>Uses your Java XML endpoint, including the organization-specific cleanup rules.</p></div></article>
+        <article><span class="note-icon">⌘</span><div><h2>Keep moving</h2><p>Use <kbd>⌘</kbd> <kbd>Enter</kbd> to format without leaving the keyboard.</p></div></article>
+      </section>
+    </main>
+    <div class="toast" id="toast" role="status"></div>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
