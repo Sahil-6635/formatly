@@ -4,7 +4,7 @@ const formatButton = document.querySelector('#formatButton');
 const formatTabs = [...document.querySelectorAll('.format-tab')];
 const fileInput = document.querySelector('#fileInput');
 const apiStatus = document.querySelector('#apiStatus');
-const apiBase = window.FORMATLY_CONFIG?.apiBase || 'https://made-by-sahil.onrender.com';
+const apiBase = window.FORMATLY_CONFIG?.apiBase || 'https://made-by-sahil.onrender.com/api/beautify';
 let format = 'json';
 let lastOutput = '';
 
